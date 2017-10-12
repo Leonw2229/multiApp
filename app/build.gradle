@@ -1,0 +1,109 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
+    defaultConfig {
+        applicationId "com.persons"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary= true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "app"
+
+
+    sourceSets {
+        li {
+            java.srcDir('src/li/java')
+            res.srcDir('src/li/res')
+
+            // assets.srcDir('src/li/assets')
+            // manifest.srcFile('src/li/AndroidManifest.xml')
+        }
+
+        zhang {
+            java.srcDir('src/zhang/java')
+            res.srcDir('src/zhang/res')
+
+            // assets.srcDir('src/zhang/assets')
+            // manifest.srcFile('src/zhang/AndroidManifest.xml')
+        }
+    }
+
+    signingConfigs {
+
+        // 只是用来做演示，没有特地生成签名文件
+
+        li {
+            storeFile file("src/li/liKeystore.jks")
+            storePassword "li123"
+            keyAlias "li"
+            keyPassword "li1234"
+
+            // 开启 V2 签名
+            v2SigningEnabled true
+        }
+
+        zhang {
+            storeFile file("src/zhang/liKeystore.jks")
+            storePassword "zhang123"
+            keyAlias "zhang"
+            keyPassword "zhang1234"
+            v2SigningEnabled true
+        }
+    }
+
+    productFlavors {
+        li {
+            applicationId "com.persons.li"
+            versionCode 2
+            dimension "app"
+            versionName "1.0.2"
+
+            signingConfig signingConfigs.li
+
+        }
+
+        zhang {
+            applicationId "cn.zhang"
+            versionCode 1
+            dimension "app"
+            versionName "1.0"
+
+            signingConfig signingConfigs.zhang
+
+            manifestPlaceholders = [
+                    MOB_APPKEY   : "202c38fasdccb5b", // ShareSDK的key
+                    MOB_APPSECRET: "ac23456d85f29333b20f643502979468", //ShareSDK
+                    JPUSH_PKGNAME: applicationId
+            ]
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.0.0-beta1'
+    implementation 'com.android.support:design:26.0.0-beta1'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:support-vector-drawable:26.0.0-beta1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+}
